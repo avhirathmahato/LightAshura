@@ -3,60 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LightAshuraa | Official</title>
+    <title>LightAshuraa | V4 Awakened</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #000; }
+        body, html { 
+            width: 100%; height: 100%; 
+            overflow: hidden; background-color: #000; 
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-        /* Full-screen video setup */
-        .v-bg {
+        /* Background Video Fix */
+        #bg-video {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        .v-bg iframe {
-            width: 100vw;
-            height: 56.25vw;
-            min-height: 100vh;
-            min-width: 177.77vh;
-            position: absolute;
             top: 50%; left: 50%;
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
+            z-index: -2;
             transform: translate(-50%, -50%);
+            object-fit: cover;
         }
 
-        /* Darkening and Blur Layer */
+        /* Overlay with V4 Glow */
         .overlay {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.45); 
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            background: linear-gradient(to top, rgba(255, 230, 0, 0.15), rgba(0,0,0,0.4));
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             z-index: -1;
         }
 
-        /* CSS-only yellow sparks (Can't break!) */
-        .spark {
+        /* V4 Aura Particles (Floating from bottom) */
+        .v4-particle {
             position: absolute;
+            bottom: -20px;
             background: #fffb00;
             border-radius: 50%;
             pointer-events: none;
-            box-shadow: 0 0 10px #ffee00, 0 0 20px #ffcc00;
-            animation: moveUp 10s infinite linear;
+            box-shadow: 0 0 15px #ffee00, 0 0 30px #ffaa00;
+            animation: v4Rise 6s infinite ease-out;
             opacity: 0;
         }
 
-        @keyframes moveUp {
-            0% { transform: translateY(110vh) scale(0); opacity: 0; }
-            30% { opacity: 0.8; }
-            70% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        @keyframes v4Rise {
+            0% { transform: translateY(0) scale(0) translateX(0); opacity: 0; }
+            20% { opacity: 0.8; }
+            50% { transform: translateY(-50vh) scale(1.2) translateX(20px); }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-110vh) scale(0.5) translateX(-20px); opacity: 0; }
         }
 
-        .ui-center {
+        /* UI Styling */
+        .content {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -65,61 +64,81 @@
             z-index: 10;
         }
 
-        /* Glowing YouTube Button */
-        .btn-yt {
-            padding: 22px 55px;
-            font-size: 1.6rem;
+        .subscribe-btn {
+            padding: 22px 60px;
+            font-size: 1.8rem;
             font-weight: 900;
-            color: white;
+            color: #fff;
             text-decoration: none;
             background: #ff0000;
-            border-radius: 60px;
+            border-radius: 50px;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
-            transition: 0.4s ease;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            letter-spacing: 4px;
+            /* Heavy Neon Glow */
+            box-shadow: 0 0 20px #ff0000, 0 0 40px rgba(255, 0, 0, 0.6);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid rgba(255,255,255,0.2);
         }
 
-        .btn-yt:hover {
-            transform: scale(1.1);
+        .subscribe-btn:hover {
+            transform: scale(1.1) rotate(-1deg);
             background: #ff2b2b;
-            box-shadow: 0 0 60px #ff0000;
-            letter-spacing: 6px;
+            box-shadow: 0 0 60px #ff0000, 0 0 100px rgba(255, 255, 255, 0.2);
+            letter-spacing: 8px;
+        }
+
+        /* Vignette effect to focus on center */
+        .vignette {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            box-shadow: inset 0 0 150px rgba(0,0,0,0.8);
+            z-index: 1;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="v-bg">
-        <iframe 
-            src="https://www.youtube.com/embed/qZoLkv74fM0?autoplay=1&mute=1&loop=1&playlist=qZoLkv74fM0&controls=0&modestbranding=1&rel=0" 
-            frameborder="0" 
-            allow="autoplay; encrypted-media">
-        </iframe>
-    </div>
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="background.mp4" type="video/mp4">
+    </video>
 
     <div class="overlay"></div>
+    <div class="vignette"></div>
 
-    <div class="ui-center">
-        <a href="https://www.youtube.com/@LIghtAshuraa" target="_blank" class="btn-yt">
+    <div class="content">
+        <a href="https://www.youtube.com/@LIghtAshuraa" target="_blank" class="subscribe-btn">
             Subscribe
         </a>
     </div>
 
     <script>
-        // Create the sparks via JavaScript
-        for (let i = 0; i < 30; i++) {
-            const s = document.createElement('div');
-            s.className = 'spark';
-            const size = Math.random() * 5 + 2 + 'px';
-            s.style.width = size;
-            s.style.height = size;
-            s.style.left = Math.random() * 100 + 'vw';
-            s.style.animationDuration = Math.random() * 6 + 4 + 's';
-            s.style.animationDelay = Math.random() * 10 + 's';
-            document.body.appendChild(s);
+        // V4 Particle Emitter
+        function createParticle() {
+            const p = document.createElement('div');
+            p.className = 'v4-particle';
+            
+            // Randomize size, position, and speed
+            const size = Math.random() * 6 + 3 + 'px';
+            p.style.width = size;
+            p.style.height = size;
+            p.style.left = Math.random() * 100 + 'vw';
+            
+            // Randomize animation duration for a natural feel
+            const duration = Math.random() * 4 + 4 + 's';
+            p.style.animationDuration = duration;
+            
+            document.body.appendChild(p);
+
+            // Remove particle after animation to keep the site fast
+            setTimeout(() => {
+                p.remove();
+            }, duration * 1000);
         }
+
+        // Emit particles every 150ms
+        setInterval(createParticle, 150);
     </script>
 </body>
 </html>
