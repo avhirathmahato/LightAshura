@@ -1,0 +1,43 @@
+body {
+    background-color: #0f0f0f; /* Dark background makes the glow pop */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.yt-button {
+    text-decoration: none;
+    color: #fff;
+    background-color: #ff0000; /* YouTube Red */
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    /* The initial glow */
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+}
+
+/* Hover Effects */
+.yt-button:hover {
+    transform: scale(1.1); /* Grows slightly */
+    box-shadow: 0 0 30px rgba(255, 0, 0, 1), 0 0 60px rgba(255, 0, 0, 0.4);
+    background-color: #ff3333;
+}
+
+/* Click Animation */
+.yt-button:active {
+    transform: scale(0.95);
+}
+
+.icon {
+    font-size: 1.5rem;
+}
