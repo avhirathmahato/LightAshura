@@ -3,14 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LightAshuraa Hub</title>
-    <link rel="stylesheet" href="style.css">
+    <title>LightAshuraa | Blox Fruits Hub</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        #fruit-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .floating-fruit {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.3;
+            transition: opacity 0.4s ease, transform 0.1s linear, filter 0.4s ease;
+            filter: grayscale(30%);
+        }
+
+        /* Proximity glow effect */
+        .floating-fruit.active {
+            opacity: 1;
+            filter: grayscale(0%) drop-shadow(0 0 15px rgba(255, 255, 255, 0.6));
+            transform: scale(1.2);
+        }
+
+        .yt-glow-button {
+            position: relative;
+            padding: 22px 45px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background-color: #ff0000;
+            border-radius: 60px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 10;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
+        }
+
+        .yt-glow-button:hover {
+            letter-spacing: 4px;
+            background-color: #ff2222;
+            box-shadow: 0 0 40px #ff0000, 0 0 80px rgba(255, 0, 0, 0.5);
+            transform: scale(1.08);
+        }
+
+        .play-icon { font-size: 1.8rem; transition: 0.4s; }
+        .yt-glow-button:hover .play-icon { transform: rotate(360deg); }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <a href="https://www.youtube.com/@LightAshuraa" target="_blank" class="yt-button">
-            <span class="icon">▶</span> Subscribe to LightAshuraa
-        </a>
-    </div>
+
+    <div id="fruit-background"></div>
+
+    <a href="https://www.youtube.com/@LIghtAshuraa" target="_blank" class="yt-glow-button">
+        <span class="play-icon">▶</span>
+        Subscribe to LightAshuraa
+    </a>
+
+    <script>
+        // Direct links to the fruit images
+        const fruitImages = [
+            'http://googleusercontent.com/image_collection/image_retrieval/16384128051478099613_0', // Light
+            'http://googleusercontent.com/image_collection/image_retrieval/15551072994697767750_0', // T-Rex
+            'http://googleusercontent.com/image_collection/image_retrieval/10438632127703268973_0', // Kitsune
+            'http://googleusercontent.com/image_collection/image_retrieval/4621075415705102751_0',  // Dragon
+            'http://googleusercontent.com/image_collection/image_retrieval/18151902124788505618_0', // Tiger
+            'http://googleusercontent.com/image_collection/image_retrieval/2291885791649184866_0',  // Yeti
+            'http://googleusercontent.com/image_collection/image_retrieval/1237635130038463713_0',  // Control
+            'http://googleusercontent.com/image_collection/image_retrieval/12180885581747449509_0'   // Gravity
+        ];
+
+        const container = document.getElementById('fruit-background');
+        const fruitNodes = [];
+
+        // Create and place fruits randomly
+        fruitImages.forEach(src => {
+            const img = document.createElement('div');
+            img.className = 'floating-fruit';
+            img.style.backgroundImage = `url('${src}')`;
+            img.style.left = Math.random() * 85 + 'vw';
+            img.style.top = Math.random() * 85 + 'vh';
+            img.dataset.depth = Math.random() * 0.4 + 0.1;
+            container.appendChild(img);
+            fruitNodes.push(img);
+        });
+
+        // Interactive mouse movement
+        document.addEventListener('mousemove', (e) => {
+            const { clientX: x, clientY: y } = e;
+
+            fruitNodes.forEach(fruit => {
+                const depth = parseFloat(fruit.dataset.depth);
+                const moveX = (window.innerWidth / 2 - x) * depth / 8;
+                const moveY = (window.innerHeight / 2 - y) * depth / 8;
+                
+                // Parallax movement
+                fruit.style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+                // Glow when mouse is near
+                const rect = fruit.getBoundingClientRect();
+                const fx = rect.left + rect.width / 2;
+                const fy = rect.top + rect.height / 2;
+                const dist = Math.sqrt(Math.pow(x - fx, 2) + Math.pow(y - fy, 2));
+
+                if (dist < 200) {
+                    fruit.classList.add('active');
+                } else {
+                    fruit.classList.remove('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
